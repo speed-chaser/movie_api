@@ -1,15 +1,13 @@
 const express = require('express'),
     morgan = require('morgan'),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override');
+    bodyParser = require('body-parser');
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(methodOverride());
 
 app.use((err, req, res, next) => {
-console.log('boop');
+    console.error(err);
 });
 
 app.use(morgan('common'));
@@ -64,9 +62,9 @@ app.get('/', (req, res) => {
     res.send('Welcome to the movie club!');
 });
 
-app.get('/documentation', (req, res) => {
-    app.use(express.static('public'));
-});
+app.get('/documentation', (req, res) => {                  
+    res.sendFile('public/documentation.html', { root: __dirname });
+  });
 
 app.get('/movies', (req, res) => {
     res.json(topMovies);
