@@ -17,134 +17,186 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-let movies = [
+/*let movies = [
     {
+        movieId:'',
         title: 'Good Will Hunting',
-        genre: ['Romance','Drama','Indie'],
-        director: {
-            name: 'Gus Van Sant',
-            birthYear: 1952,
-            bio: 'Gus Green Van Sant Jr. is an American film director, producer, photographer, and musician. He has earned \
-            acclaim as both an independent and mainstream filmmaker. His films typically deal with themes of marginalized \
-            subcultures, in particular homosexuality.'
-        }
-
+        description: 'Will Hunting, a janitor at M.I.T., has a gift for mathematics, but needs help from a psychologist to find direction in his life.',
+        GenreID: '1',
+        DirectorID: '1',
+        movieImgUrl: 'goodwillhunting.png',
+        featured: 'Y'
     },
     {
+        movieId: '',
         title: 'The Social Network',
-        genre: ['Drama','Historical Drama', 'Historical Fiction'],
-        director: {
-            name: 'David Fincher',
-            birthYear: 1962,
-            bio: 'David Andrew Leo Fincher is an American filmmaker. His films, most of which are psychological thrillers, \
-            have collectively grossed over $2.1 billion worldwide and have received 10 Academy Award nominations; this \
-            includes three Best Director nominations for him.'
-        }
+        description: 'As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea and by the co-founder who was later squeezed out of the business.',
+        GenreID: '1',
+        DirectorID: '2',
+        movieImgUrl: 'thesocialnetwork.png',
+        featured: 'Y'
     },
     {
+        movieId: '',
         title: 'Django: Unchained',
-        genre: ['Western','Action','Adventure'],
-        director: {
-            name: 'Quentin Tarantino',
-            birthYear: 1963,
-            bio: 'Quentin Jerome Tarantino is an American film director, writer, producer, and actor. His films are characterized\
-             by stylized violence, extended dialogue including a pervasive use of profanity, and references to popular culture.'
-        }
+        description: 'With the help of a German bounty-hunter, a freed slave sets out to rescue his wife from a brutal plantation owner in Mississippi.',
+        GenreID: '2',
+        DirectorID: '3',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Scott Pilgrim vs. the World',
-        genre: ['Comedy','Action','Romance'],
-        director: {
-            name: 'Edgar Wright',
-            birthYear: '1974',
-            bio: 'Edgar Howard Wright is an English filmmaker. He is known for his fast-paced and kinetic, satirical genre films,\
-             which feature extensive utilisation of expressive popular music, Steadicam tracking shots, dolly zooms and a signature\
-              editing style that includes transitions, whip pans and wipes.'
-        }
+        description: 'In a magically realistic version of Toronto, a young man must defeat his new girlfriend\'s seven evil exes one by one in order to win her heart.',
+        GenreID: '3',
+        DirectorID: '4',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Back to the Future',
-        genre: ['Sci-Fi','Comedy','Adventure'],
-        director: {
-            name: 'Robert Zemeckis',
-            birthYear: '1952',
-            bio: 'Robert Lee Zemeckis is an American filmmaker. He first came to public attention as the director of the action-adventure\
-             romantic comedy Romancing the Stone, the science-fiction comedy Back to the Future film trilogy, and the live-action/animated\
-              comedy Who Framed Roger Rabbit.'
-        }
+        description: 'Marty McFly, a 17-year-old high school student, is accidentally sent 30 years into the past in a time-traveling DeLorean invented by his close friend, the maverick scientist Doc Brown.',
+        GenreID: '4',
+        DirectorID: '5',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Bottle Rocket',
+        description: 'Three friends plan to pull off a simple robbery and go on the run.',
         genre: ['Comedy','Drama','Crime'],
-        director: {
-            name: 'Wes Anderson',
-            birthYear: 1969,
-            bio: 'Wesley Wales Anderson is an American filmmaker. His films are known for their eccentricity, unique visual and narrative\
-             styles, and frequent use of ensemble casts. They often contain themes of grief, loss of innocence, and dysfunctional families.\
-              Anderson is cited by some critics as a modern-day example of an auteur.'
-        }
+        DirectorID: '6',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'True Romance',
-        genre: ['Romance','Drama','Crime'],
-        director: {
-            name: 'Tony Scott',
-            birthYear: 1944,
-            bio: 'Anthony David Leighton Scott was an English film director and producer. He was known for directing highly successful action\
-             and thriller films such as Top Gun, Beverly Hills Cop II, Days of Thunder, The Last Boy Scout, True Romance, Crimson Tide, Enemy\
-              of the State, Man on Fire, Déjà Vu, and Unstoppable.'
-        }
+        description: 'In Detroit, a lonely pop culture geek marries a call girl, steals cocaine from her pimp, and tries to sell it in Hollywood. Meanwhile, the owners of the cocaine, the Mob, track them down in an attempt to reclaim it.',
+        GenreID: '6',
+        DirectorID: '7',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Dead Poets Society',
-        genre: ['Comedy','Teen','Drama'],
-        director: {
-            name: 'Peter Weir',
-            birthYear: 1944,
-            bio: 'Peter Lindsay Weir AM is a retired Australian film director. He is known for directing films crossing various genres over\
-             forty years with films such as Picnic at Hanging Rock, Gallipoli, Witness, Dead Poets Society, Fearless, The Truman Show, Master\
-              and Commander: The Far Side of the World, and The Way Back.'
-        }
+        description: 'Maverick teacher John Keating uses poetry to embolden his boarding school students to new heights of self-expression.',
+        GenreID: '1',
+        DirectorID: '8',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Interstellar',
-        genre: ['Sci-Fi','Drama','Adventure'],
-        director: {
-            name: 'Christopher Nolan',
-            birthYear: 1970,
-            bio: 'Christopher Edward Nolan CBE is a British and American filmmaker. Known for his Hollywood blockbusters with complex storytelling,\
-             Nolan is considered a leading filmmaker of the 21st century. His films have grossed $5 billion worldwide.'
-        }
+        description: 'When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.',
+        GenreID: '4',
+        DirectorID: '9',
+        movieImgUrl: '',
+        featured: 'N'
     },
     {
+        movieId: '',
         title: 'Catch Me If You Can',
-        genre: ['Comedy','Crime','Drama'],
-        director: {
-            name: 'Steven Spielberg',
-            birthYear: 1946,
-            bio: 'Steven Allan Spielberg KBE is an American filmmaker. A major figure of the New Hollywood era and pioneer of the modern blockbuster,\
-             he is the most commercially successful director in history'
-        }
+        description: 'Barely 21 yet, Frank is a skilled forger who has passed as a doctor, lawyer and pilot. FBI agent Carl becomes obsessed with tracking down the con man, who only revels in the pursuit.',
+        GenreID: '6',
+        DirectorID: '10',
+        movieImgUrl: '',
+        featured: 'N'
     }
+];
 
+let directors = [
+    {
+        DirectorID: '1',
+        name: 'Gus Van Sant',
+        birthYear: 1952,
+        bio: 'Gus Green Van Sant Jr. is an American film director, producer, photographer, and musician. He has earned acclaim as both an independent and mainstream filmmaker. His films typically deal with themes of marginalized subcultures, in particular homosexuality.'
+    },
+    {
+        DirectorID: '2',
+        name: 'David Fincher',
+        birthYear: 1962,
+        bio: 'David Andrew Leo Fincher is an American filmmaker. His films, most of which are psychological thrillers, have collectively grossed over $2.1 billion worldwide and have received 10 Academy Award nominations; this includes three Best Director nominations for him.'
+    },
+    {
+        DirectorID: '3',
+        name: 'Quentin Tarantino',
+        birthYear: 1963,
+        bio: 'Quentin Jerome Tarantino is an American film director, writer, producer, and actor. His films are characterized by stylized violence, extended dialogue including a pervasive use of profanity, and references to popular culture.'
+    },
+    {
+        DirectorID: '4',
+        name: 'Edgar Wright',
+        birthYear: 1974,
+        bio: 'Edgar Howard Wright is an English filmmaker. He is known for his fast-paced and kinetic, satirical genre films, which feature extensive utilisation of expressive popular music, Steadicam tracking shots, dolly zooms and a signature editing style that includes transitions, whip pans and wipes.'
+    },
+    {
+        DirectorID: '5',
+        name: 'Robert Zemeckis',
+        birthYear: '1952',
+        bio: 'Robert Lee Zemeckis is an American filmmaker. He first came to public attention as the director of the action-adventure romantic comedy Romancing the Stone, the science-fiction comedy Back to the Future film trilogy, and the live-action/animated comedy Who Framed Roger Rabbit.'
+    },
+    {
+        DirectorID: '6',
+        name: 'Wes Anderson',
+        birthYear: 1969,
+        bio: 'Wesley Wales Anderson is an American filmmaker. His films are known for their eccentricity, unique visual and narrative styles, and frequent use of ensemble casts. They often contain themes of grief, loss of innocence, and dysfunctional families. Anderson is cited by some critics as a modern-day example of an auteur.'
+    },
+    {
+        DirectorID: '7',
+        name: 'Tony Scott',
+        birthYear: 1944,
+        bio: 'Anthony David Leighton Scott was an English film director and producer. He was known for directing highly successful action\
+        and thriller films such as Top Gun, Beverly Hills Cop II, Days of Thunder, The Last Boy Scout, True Romance, Crimson Tide, Enemy\
+        of the State, Man on Fire, Déjà Vu, and Unstoppable.'
+    },
+    {
+        DirectorID: '8',
+        name: 'Peter Weir',
+        birthYear: 1944,
+        bio: 'Peter Lindsay Weir AM is a retired Australian film director. He is known for directing films crossing various genres over\
+         forty years with films such as Picnic at Hanging Rock, Gallipoli, Witness, Dead Poets Society, Fearless, The Truman Show, Master\
+          and Commander: The Far Side of the World, and The Way Back.'
+    },
+    {
+        DirectorID: '9',
+        name: 'Christopher Nolan',
+        birthYear: 1970,
+        bio: 'Christopher Edward Nolan CBE is a British and American filmmaker. Known for his Hollywood blockbusters with complex storytelling,\
+         Nolan is considered a leading filmmaker of the 21st century. His films have grossed $5 billion worldwide.'
+    },
+    {
+        DirectorID: '10',
+        name: 'Steven Spielberg',
+        birthYear: 1946,
+        bio: 'Steven Allan Spielberg KBE is an American filmmaker. A major figure of the New Hollywood era and pioneer of the modern blockbuster,\
+         he is the most commercially successful director in history'
+    },
 ];
 
 let users = [
     {
-        id: '00000000-0000-000e-0000-000000000000',
+        id: '1',
         username: 'Chase',
-        email: 'chase@chaseflix.com',
         password: 'admin',
+        email: 'chase@chaseflix.com',
+        birthday: '09-07-1996',
         favorites: []
     },
     {
         id: '2',
         username: 'Mace',
         email: 'mace@gmail.com',
-        password: 'brother222',
+        password: 'test222',
+        birthday: '09-09-1998',
         favorites: [],
     }
-];
+];*/
 
 
 // GET requests
