@@ -14,6 +14,8 @@ const express = require('express'),
     bodyParser = require('body-parser')
     uuid = require('uuid');
 
+
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -24,15 +26,17 @@ app.use((err, req, res, next) => {
 
 app.use(morgan('common'));
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
 
 
 //GET Requests
 
 //Get all movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
