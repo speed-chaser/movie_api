@@ -22,6 +22,7 @@
                     <th>Business Logic</th>
                     <th>URL</th>
                     <th>HTTP Method</th>    
+                    <th>Endpoint</th>
                     <th>Request Body Data Format</th>      
                     <th>Response Body Data Format</th>         
                 </thead>
@@ -32,77 +33,133 @@
                         <td>GET</td>
                         <td>None</td>
                         <td>None</td>
-                        <td>A JSON object of all available movies</td>
+                        <td>Data from chaseflix_movies_db.json of all movies</td>
                     </tr>
                     <tr>
                         <td>Returns data about a single movie by title</td>
-                        <td>/movies/:title</td>
+                        <td>/movies/:Title</td>
                         <td>GET</td>
-                        <td>:title</td>
+                        <td>:Title</td>
                         <td>None</td>
-                        <td>A JSON object of the specified movie</td>
+                        <td>Data from chaseflix_movies_db.json of the specified movie</td>
+                    </tr>
+                    <tr>
+                        <td>Returns data about all movies with the same genre</td>
+                        <td>/movies/genres/:Genre</td>
+                        <td>GET</td>
+                        <td>:Genre</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_movies_db.json of movies with genres matching the searched genre</td>
+                    </tr>
+                    <tr>
+                        <td>Returns data about all movies with the same Director</td>
+                        <td>/movies/directors/:Director</td>
+                        <td>GET</td>
+                        <td>:Director</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_movies_db.json of the specified movies with the director searched by the user</td>
+                    </tr>
+                    <tr>
+                        <td>Returns data about all movies with the same Actor</td>
+                        <td>/movies/actors/:Actor</td>
+                        <td>GET</td>
+                        <td>:Actor</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_movies_db.json of the specified movies featuring the specified actor</td>
+                    </tr>
+                    <tr>
+                        <td>Returns a list of all genres</td>
+                        <td>/genres</td>
+                        <td>GET</td>
+                        <td>None</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_genres_db.json of all available genres</td>
                     </tr>
                     <tr>
                         <td>Returns data about specific genre by name</td>
-                        <td>/movies/genres/:genre</td>
+                        <td>/genres/:Name</td>
                         <td>GET</td>
-                        <td>:genre</td>
+                        <td>:Name</td>
                         <td>None</td>
-                        <td>A JSON object of the specified genre</td>
+                        <td>Data from chaseflix_genres_db.json of the specified genre</td>
                     </tr>
                     <tr>
-                        <td>Returns data about a diretor by name</td>
-                        <td>/movies/directors/:name</td>
+                        <td>Returns a list of all directors</td>
+                        <td>/directors</td>
                         <td>GET</td>
-                        <td>:name</td>
                         <td>None</td>
-                        <td>A JSON object of the specified director</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_directors_db.json of all available directors</td>
                     </tr>
                     <tr>
-                        <td>Allows a user to be created</td>
-                        <td>/users</td>
-                        <td>POST</td>
+                        <td>Returns data about a director by name</td>
+                        <td>/directors/:Name</td>
+                        <td>GET</td>
+                        <td>:Name</td>
                         <td>None</td>
-                        <td>A JSON object of the new user, structured: {"username": "", "password": "", "email": ""}</td>
-                        <td>A JSON object of the new user, structured: {"username": "", "password": "", "email": ""}</td>
-                    </tr>  
+                        <td>Data from chaseflix_directors_db.json of the specified director</td>
+                    </tr>
+                    <tr>
+                        <td>Returns a list of all actors</td>
+                        <td>/actors</td>
+                        <td>GET</td>
+                        <td>None</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_actors_db.json of all available directors</td>
+                    </tr>
+                    <tr>
+                        <td>Returns data about an actor by name</td>
+                        <td>/actors/:Name</td>
+                        <td>GET</td>
+                        <td>:Name</td>
+                        <td>None</td>
+                        <td>Data from chaseflix_actors_db.json of the specified actor</td>
+                    </tr>
                     <tr>
                         <td>Returns a list of all users</td>
                         <td>/users</td>
                         <td>GET</td>
                         <td>None</td>
                         <td>None</td>
-                        <td>A JSON object of all registered users</td>
+                        <td>Data from chaseflix_users_db.json of all registered users</td>
                     </tr>
                     <tr>
+                        <td>Allows a user to be created</td>
+                        <td>/users</td>
+                        <td>POST</td>
+                        <td>None</td>
+                        <td>New data to chaseflix_users_db.json of the new user, structured: {"username": "", "password": "", "email": "", "Birthday": "month-day-year"}</td>
+                        <td>Updated data from chaseflix_users_db.json of the new user, structured: {"username": "", "password": "", "email": "", "Birthday": "month-day-year"}</td>
+                    </tr>  
+                    <tr>
                         <td>Allows users to update their information</td>
-                        <td>/users/:username</td>
+                        <td>/users/:Username</td>
                         <td>PUT</td>
-                        <td>:username</td>
-                        <td>A JSON object of the user's new information, strucured: {"username": "", "password": "", "email": ""}</td>
-                        <td>A JSON object of the user's new information, structured: {"username": "", "password": "", "email": ""}</td>
+                        <td>:Username</td>
+                        <td>New data to chaseflix_users_db.json of the user's new information, strucured: {"Username": "", "Password": "", "Email": "", "Birthday": "month-day-year"}</td>
+                        <td>Updated Data from chaseflix_users_db.json object of the user's new information, structured: {"Username": "", "Password": "", "Email": "", "Birthday": "month-day-year"}</td>
                     </tr>
                     <tr>
                         <td>Allows users to add a movie to their favorites</td>
-                        <td>/users/:username/favorites/:title</td>
+                        <td>/users/:Username/movies/:MovieID</td>
                         <td>POST</td>
-                        <td>:username, :title</td>
+                        <td>:Username, :MovieID</td>
                         <td>None</td>
-                        <td>A JSON of the user's favorites</td>
+                        <td>Updated data to chaseflix_users_db.json of the user's FavoriteMovies array</td>
                     </tr>
                     <tr>
                         <td>Allows user to delete a movie from their favorites</td>
-                        <td>/users/:username/:title</td>
+                        <td>/users/:username/movies/:MovieID</td>
                         <td>DELETE</td>
-                        <td>:username, :title</td>
+                        <td>:username, :MovieID</td>
                         <td>None</td>
-                        <td>Text confirming the movie has been removed from the user's list</td>
+                        <td>Updated data to chaseflix_users_db.json of the user's FavoriteMovies array</td>
                     </tr>
                     <tr>
                         <td>Allows a user to be deleted</td>
-                        <td>/users/:username</td>
+                        <td>/users/:Username</td>
                         <td>DELETE</td>
-                        <td>:username</td>
+                        <td>:Username</td>
                         <td>None</td>
                         <td>Text confirming the user has been deleted</td>
                     </tr>
