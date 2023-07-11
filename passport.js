@@ -35,9 +35,7 @@ passport.use(
           console.log(error);
           return callback(error);
         });
-    }
-  )
-);
+    }));
 
 passport.use(
   new JWTStrategy(

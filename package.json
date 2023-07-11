@@ -2,7 +2,7 @@
   "name": "movie_api",
   "version": "1.0.0",
   "engines": {
-    "node": "18.x"
+    "node": "18.16.1"
   },
   "description": "A web application that will provide users with access to information about different movies, directors, and genres. Users will be able to sign up, update their personal information, and create a list of their favorite movies.",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Chase",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -19,6 +19,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
+    "mongodb": "^5.6.0",
     "mongoose": "^7.3.2",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
