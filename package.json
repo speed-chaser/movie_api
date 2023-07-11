@@ -2,10 +2,10 @@
   "name": "movie_api",
   "version": "1.0.0",
   "engines": {
-    "node": "18.*"
+    "node": "18.*",
+    "npm": "9.7.2"
   },
-  "description": "A web application that will provide users with access to information about different movies, directors, and genres. Users will be able to sign up, update their personal information, and create a list of their favorite movies.",
-  "main": "index.js",
+    "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
@@ -25,5 +25,9 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "uuid": "^9.0.0"
-  }
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0"
+  },
+  "description": ""
 }

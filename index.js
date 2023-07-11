@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-mongoose.connect( process.env.CONNECTION_URI, {
-  useNewUrlParser: 
-  true,useUnifiedTopology: true,
-});
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 //mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {useNewUrlParser: true,useUnifiedTopology: true,});
 const Models = require("./models.js");
 
@@ -369,7 +366,7 @@ app.delete(
 );
 
 // listen for requests
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
