@@ -12,19 +12,33 @@ passport.use(new LocalStrategy({
     passwordField: 'Password'
 }, (username, password, callback) => {
     console.log(username + ' ' + password);
+<<<<<<< Updated upstream
     Users.findOne({Username: username}, (error, user) => {
         if (error) {
             console.log(error);
             return callback(error);
         }
 
+=======
+    Users.findOne({Username: username})
+    .then((user) => {
+>>>>>>> Stashed changes
         if(!user) {
             console.log('incorrect username');
             return callback(null, false, {message: 'Incorrect username or password.'});
         }
+<<<<<<< Updated upstream
 
         console.log('finished');
         return callback(null, user);
+=======
+        console.log('finished');
+        return callback(null, user);
+    })
+    .catch((error) => {
+        console.log(error);
+        return callback(error);
+>>>>>>> Stashed changes
     });
 }));
 
