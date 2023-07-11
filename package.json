@@ -5,7 +5,7 @@
     "node": "18.*",
     "npm": "9.7.2"
   },
-    "main": "index.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
