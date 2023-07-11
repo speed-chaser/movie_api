@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <td>Returns data about all movies with the same genre</td>
-                        <td>/movies/genres/:Genre</td>
+                        <td>/movies/genres/:Name</td>
                         <td>GET</td>
                         <td>:Genre</td>
                         <td>None</td>
@@ -68,28 +68,12 @@
                         <td>Data from chaseflix_movies_db.json of the specified movies featuring the specified actor</td>
                     </tr>
                     <tr>
-                        <td>Returns a list of all genres</td>
-                        <td>/genres</td>
-                        <td>GET</td>
-                        <td>None</td>
-                        <td>None</td>
-                        <td>Data from chaseflix_genres_db.json of all available genres</td>
-                    </tr>
-                    <tr>
                         <td>Returns data about specific genre by name</td>
-                        <td>/genres/:Name</td>
+                        <td>/genres/:Genre</td>
                         <td>GET</td>
                         <td>:Name</td>
                         <td>None</td>
                         <td>Data from chaseflix_genres_db.json of the specified genre</td>
-                    </tr>
-                    <tr>
-                        <td>Returns a list of all directors</td>
-                        <td>/directors</td>
-                        <td>GET</td>
-                        <td>None</td>
-                        <td>None</td>
-                        <td>Data from chaseflix_directors_db.json of all available directors</td>
                     </tr>
                     <tr>
                         <td>Returns data about a director by name</td>
@@ -98,22 +82,6 @@
                         <td>:Name</td>
                         <td>None</td>
                         <td>Data from chaseflix_directors_db.json of the specified director</td>
-                    </tr>
-                    <tr>
-                        <td>Returns a list of all actors</td>
-                        <td>/actors</td>
-                        <td>GET</td>
-                        <td>None</td>
-                        <td>None</td>
-                        <td>Data from chaseflix_actors_db.json of all available directors</td>
-                    </tr>
-                    <tr>
-                        <td>Returns data about an actor by name</td>
-                        <td>/actors/:Name</td>
-                        <td>GET</td>
-                        <td>:Name</td>
-                        <td>None</td>
-                        <td>Data from chaseflix_actors_db.json of the specified actor</td>
                     </tr>
                     <tr>
                         <td>Returns a list of all users</td>
