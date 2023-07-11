@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChaseFlix</title>
+  </head>
+  <body>
+    <header>
+      <h1>ChaseFlix</h1>
+    </header>
+    <main>
+      <p>
+        This web application will provide users with access to information about
+        different movies, directors, and genres. <br />Users will be able to
+        sign up, update their personal inforamtion, and create a list of their
+        favorite movies.
+      </p>
+      <div>
+        <h2>Endpoints</h2>
+        <table>
+          <thead>
+            <th>Business Logic</th>
+            <th>URL</th>
+            <th>HTTP Method</th>
+            <th>Endpoint</th>
+            <th>Request Body Data Format</th>
+            <th>Response Body Data Format</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Returns a list of all movies</td>
+              <td>/movies</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>None</td>
+              <td>Data from chaseflix_movies_db.json of all movies</td>
+            </tr>
+            <tr>
+              <td>Returns data about a single movie by title</td>
+              <td>/movies/:Title</td>
+              <td>GET</td>
+              <td>:Title</td>
+              <td>None</td>
+              <td>Data from chaseflix_movies_db.json of the specified movie</td>
+            </tr>
+            <tr>
+              <td>Returns data about all movies with the same genre</td>
+              <td>/movies/genres/:Name</td>
+              <td>GET</td>
+              <td>:Genre</td>
+              <td>None</td>
+              <td>
+                Data from chaseflix_movies_db.json of movies with genres
+                matching the searched genre
+              </td>
+            </tr>
+            <tr>
+              <td>Returns data about all movies with the same Director</td>
+              <td>/movies/directors/:Director</td>
+              <td>GET</td>
+              <td>:Director</td>
+              <td>None</td>
+              <td>
+                Data from chaseflix_movies_db.json of the specified movies with
+                the director searched by the user
+              </td>
+            </tr>
+            <tr>
+              <td>Returns data about all movies with the same Actor</td>
+              <td>/movies/actors/:Actor</td>
+              <td>GET</td>
+              <td>:Actor</td>
+              <td>None</td>
+              <td>
+                Data from chaseflix_movies_db.json of the specified movies
+                featuring the specified actor
+              </td>
+            </tr>
+            <tr>
+              <td>Returns data about specific genre by name</td>
+              <td>/genres/:Genre</td>
+              <td>GET</td>
+              <td>:Name</td>
+              <td>None</td>
+              <td>Data from chaseflix_genres_db.json of the specified genre</td>
+            </tr>
+            <tr>
+              <td>Returns data about a director by name</td>
+              <td>/directors/:Name</td>
+              <td>GET</td>
+              <td>:Name</td>
+              <td>None</td>
+              <td>
+                Data from chaseflix_directors_db.json of the specified director
+              </td>
+            </tr>
+            <tr>
+              <td>Returns a list of all users</td>
+              <td>/users</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>None</td>
+              <td>Data from chaseflix_users_db.json of all registered users</td>
+            </tr>
+            <tr>
+              <td>Allows a user to be created</td>
+              <td>/users</td>
+              <td>POST</td>
+              <td>None</td>
+              <td>
+                New data to chaseflix_users_db.json of the new user, structured:
+                {"username": "", "password": "", "email": "", "Birthday":
+                "month-day-year"}
+              </td>
+              <td>
+                Updated data from chaseflix_users_db.json of the new user,
+                structured: {"username": "", "password": "", "email": "",
+                "Birthday": "month-day-year"}
+              </td>
+            </tr>
+            <tr>
+              <td>Allows users to update their information</td>
+              <td>/users/:Username</td>
+              <td>PUT</td>
+              <td>:Username</td>
+              <td>
+                New data to chaseflix_users_db.json of the user's new
+                information, strucured: {"Username": "", "Password": "",
+                "Email": "", "Birthday": "month-day-year"}
+              </td>
+              <td>
+                Updated Data from chaseflix_users_db.json object of the user's
+                new information, structured: {"Username": "", "Password": "",
+                "Email": "", "Birthday": "month-day-year"}
+              </td>
+            </tr>
+            <tr>
+              <td>Allows users to add a movie to their favorites</td>
+              <td>/users/:Username/movies/:MovieID</td>
+              <td>POST</td>
+              <td>:Username, :MovieID</td>
+              <td>None</td>
+              <td>
+                Updated data to chaseflix_users_db.json of the user's
+                FavoriteMovies array
+              </td>
+            </tr>
+            <tr>
+              <td>Allows user to delete a movie from their favorites</td>
+              <td>/users/:username/movies/:MovieID</td>
+              <td>DELETE</td>
+              <td>:username, :MovieID</td>
+              <td>None</td>
+              <td>
+                Updated data to chaseflix_users_db.json of the user's
+                FavoriteMovies array
+              </td>
+            </tr>
+            <tr>
+              <td>Allows a user to be deleted</td>
+              <td>/users/:Username</td>
+              <td>DELETE</td>
+              <td>:Username</td>
+              <td>None</td>
+              <td>Text confirming the user has been deleted</td>
+            </tr>
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <th>MOVIEID</th>
+            <th>TITLE</th>
+            <th>DESCRIPTION</th>
+            <th>GENREID</th>
+            <th>DIRECTORID</th>
+            <th>IMAGEPATH</th>
+            <th>FEATURED</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Good Will Hunting</td>
+              <td>
+                Will Hunting, a janitor at M.I.T., has a gift for mathematics,
+                but needs help from a psychologist to find direction in his
+                life.
+              </td>
+              <td>1</td>
+              <td>1</td>
+              <td>goodwillhunting.png</td>
+              <td>True</td>
+            </tr>
+            <td>2</td>
+            <td>The Social Network</td>
+            <td>
+              As Harvard student Mark Zuckerberg creates the social networking
+              site that would become known as Facebook, he is sued by the twins
+              who claimed he stole their idea and by the co-founder who was
+              later squeezed out of the business
+            </td>
+            <td>1</td>
+            <td>2</td>
+            <td>thesocialnetwork.png</td>
+            <td>True</td>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>
