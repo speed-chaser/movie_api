@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect( process.env.CONNECTION_URI, {
+  useNewUrlParser: 
+  true,useUnifiedTopology: true,
 });
+//mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {useNewUrlParser: true,useUnifiedTopology: true,});
 const Models = require("./models.js");
 
 const Movies = Models.Movie,
@@ -38,8 +39,12 @@ let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
 
-//GET Requests
 
+
+//GET Requests
+app.get('/', (req, res) => {
+  res.send('Welcome to the movie club!');
+});
 //Get all movies
 app.get(
   "/movies",
