@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 //mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {useNewUrlParser: true,useUnifiedTopology: true,});
 const Models = require("./models.js");
 
@@ -30,33 +33,39 @@ app.use(
 );
 
 const cors = require("cors");
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://chaseflix-481df0d77a4b.herokuapp.com/'];
+let allowedOrigins = [
+  "http://localhost:8080",
+  "http://testsite.com",
+  "https://chaseflix-481df0d77a4b.herokuapp.com/",
+];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){ 
-      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-      return callback(new Error(message ), false);
-    }
-    return callback(null, true);
-  }
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        let message =
+          "The CORS policy for this application doesn’t allow access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 
 let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
 
-
-
 //GET Requests
-app.get('/', (req, res) => {
-  res.send('Welcome to the movie club!');
+app.get("/", (req, res) => {
+  res.send("Welcome to the movie club!");
 });
 //Get all movies
 app.get(
-  "/movies",
-  passport.authenticate("jwt", { session: false }),
+  "/movies" /*,
+  passport.authenticate("jwt", { session: false })*/,
   (req, res) => {
     Movies.find()
       .then((movies) => {
