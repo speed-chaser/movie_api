@@ -40,6 +40,13 @@ let allowedOrigins = [
   "https://chaseflix-481df0d77a4b.herokuapp.com",
 ];
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:1234");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 app.use(
   cors({
     origin: (origin, callback) => {
