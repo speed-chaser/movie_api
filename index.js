@@ -106,14 +106,23 @@ app.get(
   "/movies/:_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Movies.findOne({ _id: req.params._id })
-      .then((movie) => {
-        res.json(movie);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+    try {
+      const movieId = mongoose.Types.ObjectId(req.params._id);
+      Movies.findOne({ _id: movieId })
+        .then((movie) => {
+          if (!movie) {
+            return res.status(404).json({ error: "Movie not found" });
+          }
+          res.json(movie);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send("Error: " + err);
+        });
+    } catch (err) {
+      console.error(err);
+      res.status(400).json({ error: "Invalid movie ID" });
+    }
   }
 );
 
