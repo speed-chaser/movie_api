@@ -335,6 +335,7 @@ app.put(
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
+    console.log("Received username parameter:", req.params.Username);
     console.log("Username parameter:", req.params.Username);
     Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -349,6 +350,7 @@ app.put(
       { new: true }
     )
       .then((updatedUser) => {
+        console.log("Updated user:", updatedUser);
         res.json(updatedUser);
       })
       .catch((err) => {
