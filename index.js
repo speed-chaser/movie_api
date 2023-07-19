@@ -316,7 +316,7 @@ app.post(
 
 //Update User info
 app.put(
-  "/users/:Username/update",
+  "/users/:Username",
   passport.authenticate("jwt", { session: false }),
   [
     check(
