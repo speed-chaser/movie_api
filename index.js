@@ -38,7 +38,6 @@ let allowedOrigins = [
   "http://localhost:1234",
   "http://testsite.com",
   "https://chaseflix-481df0d77a4b.herokuapp.com",
-  "https://https://chaseflix.netlify.app",
 ];
 
 app.use((req, res, next) => {
