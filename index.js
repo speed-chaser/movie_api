@@ -316,28 +316,23 @@ app.post(
 
 //Update User info
 app.put(
-  "/users/:Username",
+  "/users/:Username/update",
   passport.authenticate("jwt", { session: false }),
+  [
+    check(
+      "Username",
+      "Username is required with a minimum of 4 characters"
+    ).isLength({ min: 4 }),
+    check("Username", "Username contains invalid characters.").isAlphanumeric(),
+    check("Password", "Password is required.").not().isEmpty(),
+    check("Email", "Invalid Email").isEmail(),
+  ],
   (req, res) => {
-    [
-      check(
-        "Username",
-        "Username is required with a minimum of 4 characters"
-      ).isLength({ min: 4 }),
-      check(
-        "Username",
-        "Username contains invalid characters."
-      ).isAlphanumeric(),
-      check("Password", "Password is required.").not().isEmpty(),
-      check("Email", "Invalid Email").isEmail(),
-    ],
-      (req, res) => {
-        let errors = validationResult(req);
+    let errors = validationResult(req);
 
-        if (!errors.isEmpty()) {
-          return res.status(422).json({ errors: errors.array() });
-        }
-      };
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOneAndUpdate(
@@ -356,12 +351,8 @@ app.put(
         res.json(updatedUser);
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json(updatedUser);
-        }
+        console.error(err);
+        res.status(500).send("Error: " + err.message);
       });
   }
 );
