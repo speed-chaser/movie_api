@@ -3,7 +3,10 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-//mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {useNewUrlParser: true,useUnifiedTopology: true,});
+/*mongoose.connect("mongodb://127.0.0.1:27017/chaseflixDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});*/
 const Models = require("./models.js");
 
 const Movies = Models.Movie,
@@ -42,7 +45,7 @@ let allowedOrigins = [
 ];
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:1234");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
@@ -158,18 +161,6 @@ app.get(
   }
 );
 
-//Get all movies featuring specific actor
-/*app.get('/movies/actors/:Actor', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find({'Actors.Name': req.params.Actor })
-        .then((movies) => {
-            res.json(movies);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-});*/
-
 //Get specific genre by Name
 app.get(
   "/genres/:Genre",
@@ -241,80 +232,53 @@ app.get(
 
 //POST requests
 
-//Add new User
-app.post("/users", (req, res) => {
+// Add new User
+app.post(
+  "/users",
   [
     check("Username", "Username is required").isLength({ min: 5 }),
     check("Username", "Username contains invalid characters.").isAlphanumeric(),
     check("Password", "Password is required.").not().isEmpty(),
     check("Email", "Invalid Email").isEmail(),
   ],
-    (req, res) => {
-      let errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-      }
-    };
-
-  let hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOne({ Username: req.body.Username })
-    .then((user) => {
-      if (user) {
-        return res.status(400).send(req.body.Username + "already exists");
-      } else {
-        Users.create({
-          Username: req.body.Username,
-          Password: hashedPassword,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
-        })
-          .then((user) => {
-            res.status(201).json(user);
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).send("Error: " + error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    });
-});
-
-//Add movie to user's FavoriteMovie array
-app.post(
-  "/users/:Username/movies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Users.findOneAndUpdate(
-      { Username: req.params.Username },
-      { $addToSet: { FavoriteMovies: req.params.MovieID } },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        if (!updatedUser) {
-          return res.status(404).send("Error: User doesn't  exist");
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username })
+      .then((user) => {
+        if (user) {
+          return res.status(400).send(req.body.Username + " already exists");
         } else {
-          res.json(updatedUser);
+          Users.create({
+            Username: req.body.Username,
+            Password: hashedPassword,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday,
+            Bio: req.body.Bio,
+            ProfilePic: req.body.ProfilePic,
+          })
+            .then((user) => {
+              res.status(201).json(user);
+            })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send("Error: " + error);
+            });
         }
       })
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json(updatedUser);
-        }
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error: " + error);
       });
   }
 );
 
-//UPDATE requests
-
-//Update User info
+// Update User info
 app.put(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
@@ -345,6 +309,8 @@ app.put(
           Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
+          Bio: req.body.Bio,
+          ProfilePic: req.body.ProfilePic,
         },
       },
       { new: true }
@@ -360,9 +326,7 @@ app.put(
   }
 );
 
-//DELETE requests
-
-//Delete User
+// Delete User
 app.delete(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
@@ -371,13 +335,15 @@ app.delete(
       if (!user) {
         res.status(400).send(req.params.Username + " was not found.");
       } else {
-        res.status(200).send(req.params.Username + " was succesfully deleted.");
+        res
+          .status(200)
+          .send(req.params.Username + " was successfully deleted.");
       }
     });
   }
 );
 
-//Delete movie from FavoriteMovie array
+// Delete movie from FavoriteMovie array
 app.delete(
   "/users/:Username/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -398,6 +364,95 @@ app.delete(
           res.json(updatedUser);
         }
       });
+  }
+);
+
+app.post("/users/:userId/follow/:userToFollowId", (req, res) => {
+  const { userId } = req.params.userId;
+  const { userToFollowId } = req.params.userToFollowId;
+
+  Users.findById(userId).then((currentUser) => {
+    Users.findById(userToFollowId)
+      .then((userToFollow) => {
+        if (!currentUser || !userToFollow) {
+          return res.status(404).json({ message: "User not found." });
+        }
+
+        if (currentUser.Following.includes(userToFollowId)) {
+          return res.status(400).json({ message: "User is already following" });
+        }
+
+        currentUser.Following.push(userToFollowId);
+
+        userToFollow.Followers.push(userId);
+
+        Promise.all([currentUser.save(), userToFollow.save()])
+          .then(() => {
+            return res
+              .status(200)
+              .json({ message: "User followed successfully" });
+          })
+          .catch((error) => {
+            console.error(error);
+            res.status(500).json({ message: "internal server error." });
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error." });
+      });
+  });
+});
+
+//unfollow
+app.delete(
+  "/users/:userId/follow/:userToFollowId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { userId, userToFollowId } = req.params;
+
+    Users.findById(userId).then((currentUser) => {
+      if (!currentUser) {
+        return res.status(404).json({ message: "Current user not found." });
+      }
+
+      Users.findById(userToFollowId)
+        .then((userToFollow) => {
+          if (!userToFollow) {
+            return res
+              .status(404)
+              .json({ message: "User to unfollow not found." });
+          }
+
+          // Check if the user is being followed
+          if (!currentUser.following.includes(userToFollowId)) {
+            return res
+              .status(400)
+              .json({ message: "User is not being followed." });
+          }
+
+          // Update the following list of the current user
+          currentUser.following.pull(userToFollowId);
+
+          // Update the followers list of the user being unfollowed
+          userToFollow.followers.pull(userId);
+
+          Promise.all([currentUser.save(), userToFollow.save()])
+            .then(() => {
+              return res
+                .status(200)
+                .json({ message: "User unfollowedfollowed successfully" });
+            })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).json({ message: "internal server error." });
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: "Internal server error." });
+        });
+    });
   }
 );
 

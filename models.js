@@ -32,8 +32,26 @@ let userSchema = mongoose.Schema({
   Password: { type: String, required: true },
   Email: { type: String, required: true },
   Birthday: Date,
-  Verified: Boolean,
+  Bio: { type: String, required: true, default: "" },
+  ProfilePic: { type: String, required: true, default: "" },
+  Verified: { type: Boolean, required: true, default: false },
   FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
+  Followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      default: [],
+    },
+  ],
+  Following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      default: [],
+    },
+  ],
 });
 
 userSchema.statics.hashPassword = (password) => {
