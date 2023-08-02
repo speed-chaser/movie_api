@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Models = require("./models.js");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 const AWS = require("aws-sdk");
 AWS.config.update({
@@ -43,6 +42,18 @@ app.use(
     extended: true,
   })
 );
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueFilename = generateUniqueFilename(file.originalname);
+    cb(null, uniqueFilename);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const cors = require("cors");
 let allowedOrigins = [
@@ -503,3 +514,7 @@ const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
+
+function generateUniqueFilename(originalFilename) {
+  return `${Date.now()}_${originalFilename}`;
+}
