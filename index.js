@@ -8,8 +8,8 @@ const multer = require("multer");
 
 const AWS = require("aws-sdk");
 AWS.config.update({
-  accessKeyId: process.env.SESSION_ACCESS_KEY,
-  secretAccessKey: process.env.SESSION_SECRET_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
 const fs = require("fs");
