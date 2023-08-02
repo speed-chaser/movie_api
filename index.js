@@ -1,7 +1,18 @@
-const express = require("express"),
-  mongoose = require("mongoose"),
-  bodyParser = require("body-parser"),
-  Models = require("./models.js");
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const Models = require("./models.js");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+const AWS = require("aws-sdk");
+const fs = require("fs");
+AWS.config.update({
+  accessKeyId: process.env.SESSION_ACCESS_KEY,
+  secretAccessKey: process.env.SESSION_SECRET_KEY,
+});
+
+const s3 = new AWS.S3();
 
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
@@ -320,6 +331,33 @@ app.put(
   }
 );
 
+//upload profile pic
+app.post(
+  "/upload",
+  upload.single("ProfilePic"),
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const bucketName = "chaseflix-bucket";
+      const fileName = req.file.originalname;
+      const filePath = req.file.path;
+
+      const fileLocation = await s3Uploader.uploadFileToS3(
+        bucketName,
+        fileName,
+        filePath
+      );
+
+      res
+        .status(200)
+        .json({ message: "File uploaded successfully", fileLocation });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
 // Delete User
 app.delete(
   "/users/:Username",
@@ -361,42 +399,48 @@ app.delete(
   }
 );
 
-app.post("/users/:userId/follow/:userToFollowId", (req, res) => {
-  const { userId } = req.params;
-  const { userToFollowId } = req.body;
+app.post(
+  "/users/:userId/follow/:userToFollowId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { userId } = req.params;
+    const { userToFollowId } = req.body;
 
-  Users.findById(userId).then((currentUser) => {
-    Users.findById(userToFollowId)
-      .then((userToFollow) => {
-        if (!currentUser || !userToFollow) {
-          return res.status(404).json({ message: "User not found." });
-        }
+    Users.findById(userId).then((currentUser) => {
+      Users.findById(userToFollowId)
+        .then((userToFollow) => {
+          if (!currentUser || !userToFollow) {
+            return res.status(404).json({ message: "User not found." });
+          }
 
-        if (currentUser.Following.includes(userToFollowId)) {
-          return res.status(400).json({ message: "User is already following" });
-        }
-
-        currentUser.Following.push(userToFollowId);
-
-        userToFollow.Followers.push(userId);
-
-        Promise.all([currentUser.save(), userToFollow.save()])
-          .then(() => {
+          if (currentUser.Following.includes(userToFollowId)) {
             return res
-              .status(200)
-              .json({ message: "User followed successfully" });
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).json({ message: "internal server error." });
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error." });
-      });
-  });
-});
+              .status(400)
+              .json({ message: "User is already following" });
+          }
+
+          currentUser.Following.push(userToFollowId);
+
+          userToFollow.Followers.push(userId);
+
+          Promise.all([currentUser.save(), userToFollow.save()])
+            .then(() => {
+              return res
+                .status(200)
+                .json({ message: "User followed successfully" });
+            })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).json({ message: "internal server error." });
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: "Internal server error." });
+        });
+    });
+  }
+);
 
 //unfollow
 app.delete(
