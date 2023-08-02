@@ -13,6 +13,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+const s3Uploader = require("./s3Uploader");
 
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
