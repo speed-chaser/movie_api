@@ -1,21 +1,18 @@
-require("dotenv").config();
-
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Models = require("./models.js");
 const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const AWS = require("aws-sdk");
+const fs = require("fs");
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.SESSION_ACCESS_KEY,
+  secretAccessKey: process.env.SESSION_SECRET_KEY,
 });
 
-const fs = require("fs");
-
 const s3 = new AWS.S3();
-const s3Uploader = require("./s3Uploader");
 
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
@@ -43,31 +40,17 @@ app.use(
   })
 );
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueFilename = generateUniqueFilename(file.originalname);
-    cb(null, uniqueFilename);
-  },
-});
-
-const upload = multer({ storage: storage });
-
 const cors = require("cors");
 let allowedOrigins = [
   "http://localhost:8080",
-  "http://localhost:4200",
   "http://localhost:1234",
   "http://testsite.com",
   "https://chaseflix-481df0d77a4b.herokuapp.com",
   "https://chaseflix.netlify.app",
-  "https://speed-chaser.github.io",
 ];
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:1234");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
@@ -98,9 +81,9 @@ app.get("/", (req, res) => {
 });
 //Get all movies
 app.get(
-  "/movies",
-  /*passport.authenticate("jwt", { session: false }),*/
-  (_, res) => {
+  "/movies" /*,
+  passport.authenticate("jwt", { session: false })*/,
+  (req, res) => {
     Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
@@ -392,41 +375,6 @@ app.delete(
   }
 );
 
-app.post(
-  "/users/:Username/movies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Users.findOne({ Username: req.params.Username })
-      .then((user) => {
-        if (!user) {
-          res.status(404).send("User not found");
-          return;
-        }
-        if (user.FavoriteMovies.includes(req.params.MovieID)) {
-          res.status(400).send("Movie already in favorites");
-          return;
-        }
-
-        Users.findOneAndUpdate(
-          { Username: req.params.Username },
-          { $push: { FavoriteMovies: req.params.MovieID } },
-          { new: true }
-        )
-          .then((updatedUser) => {
-            res.status(201).json(updatedUser);
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).send("Error: " + err);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
-  }
-);
-
 // Delete movie from FavoriteMovie array
 app.delete(
   "/users/:Username/movies/:MovieID",
@@ -551,7 +499,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
-
-function generateUniqueFilename(originalFilename) {
-  return `${Date.now()}_${originalFilename}`;
-}
