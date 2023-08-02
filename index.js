@@ -6,11 +6,12 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 const AWS = require("aws-sdk");
-const fs = require("fs");
 AWS.config.update({
   accessKeyId: process.env.SESSION_ACCESS_KEY,
   secretAccessKey: process.env.SESSION_SECRET_KEY,
 });
+
+const fs = require("fs");
 
 const s3 = new AWS.S3();
 const s3Uploader = require("./s3Uploader");
