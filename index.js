@@ -1,4 +1,8 @@
-const mongoose = require("mongoose");
+const express = require("express"),
+  mongoose = require("mongoose"),
+  bodyParser = require("body-parser"),
+  Models = require("./models.js");
+
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -7,27 +11,17 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });*/
-const Models = require("./models.js");
 
 const Movies = Models.Movie,
   Users = Models.User;
 
-const express = require("express"),
-  morgan = require("morgan"),
-  bodyParser = require("body-parser");
-uuid = require("uuid");
-
 const { check, validationResult } = require("express-validator");
 
 const app = express();
-
 app.use(bodyParser.json());
-
 app.use((err, req, res, next) => {
   console.log(err);
 });
-
-app.use(morgan("common"));
 
 app.use(
   bodyParser.urlencoded({
@@ -368,8 +362,8 @@ app.delete(
 );
 
 app.post("/users/:userId/follow/:userToFollowId", (req, res) => {
-  const { userId } = req.params.userId;
-  const { userToFollowId } = req.params.userToFollowId;
+  const { userId } = req.params;
+  const { userToFollowId } = req.body;
 
   Users.findById(userId).then((currentUser) => {
     Users.findById(userToFollowId)
@@ -425,17 +419,17 @@ app.delete(
           }
 
           // Check if the user is being followed
-          if (!currentUser.following.includes(userToFollowId)) {
+          if (!currentUser.Following.includes(userToFollowId)) {
             return res
               .status(400)
               .json({ message: "User is not being followed." });
           }
 
           // Update the following list of the current user
-          currentUser.following.pull(userToFollowId);
+          currentUser.Following.pull(userToFollowId);
 
           // Update the followers list of the user being unfollowed
-          userToFollow.followers.pull(userId);
+          userToFollow.Followers.pull(userId);
 
           Promise.all([currentUser.save(), userToFollow.save()])
             .then(() => {
