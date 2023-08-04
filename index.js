@@ -311,46 +311,38 @@ app.put(
     check("Password", "Password is required.").not().isEmpty(),
     check("Email", "Invalid Email").isEmail(),
   ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
+  (req, res) => {
+    let errors = validationResult(req);
 
-      if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-      }
-
-      const hashedPassword = await bcrypt.hash(req.body.Password, 10);
-
-      console.log("Received username parameter:", req.params.Username);
-      console.log("Username parameter:", req.params.Username);
-
-      let updatedFields = {
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday,
-        Bio: req.body.Bio,
-      };
-
-      // Check if a new profile picture URL is provided and update if necessary
-      if (req.body.ProfilePic) {
-        updatedFields.ProfilePic = req.body.ProfilePic;
-      }
-
-      // Update the user document
-      const updatedUser = await Users.findOneAndUpdate(
-        { Username: req.params.Username },
-        { $set: updatedFields },
-        { new: true }
-      );
-
-      console.log("Updated user:", updatedUser);
-
-      res.json(updatedUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error: " + error.message);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    console.log("Received username parameter:", req.params.Username);
+    console.log("Username parameter:", req.params.Username);
+    Users.findOneAndUpdate(
+      { Username: req.params.Username },
+      {
+        $set: {
+          Username: req.body.Username,
+          Password: hashedPassword,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday,
+          Bio: req.body.Bio,
+          ProfilePic: req.body.ProfilePic,
+        },
+      },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        console.log("Updated user:", updatedUser);
+        res.json(updatedUser);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err.message);
+      });
   }
 );
 
