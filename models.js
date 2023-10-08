@@ -32,7 +32,7 @@ let userSchema = mongoose.Schema({
   Password: { type: String, required: true },
   Email: { type: String, required: true },
   Birthday: Date,
-  Bio: { type: String, required: true, default: "" },
+  Bio: { type: String, required: false, default: "This is my bio." },
   ProfilePic: {
     type: String,
     required: true,
