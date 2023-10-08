@@ -33,7 +33,11 @@ let userSchema = mongoose.Schema({
   Email: { type: String, required: true },
   Birthday: Date,
   Bio: { type: String, required: true, default: "" },
-  ProfilePic: { type: String, required: true, default: "" },
+  ProfilePic: {
+    type: String,
+    required: true,
+    default: "https://chaseflix-bucket.s3.amazonaws.com/avatar-default.png",
+  },
   Verified: { type: Boolean, required: true, default: false },
   FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
   Followers: [
