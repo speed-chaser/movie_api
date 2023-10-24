@@ -63,6 +63,7 @@ let allowedOrigins = [
   "http://testsite.com",
   "https://chaseflix-481df0d77a4b.herokuapp.com",
   "https://chaseflix.netlify.app",
+  "https://speed-chaser.github.io/chaseflix-Angular-client",
 ];
 
 app.use((req, res, next) => {
@@ -97,9 +98,9 @@ app.get("/", (req, res) => {
 });
 //Get all movies
 app.get(
-  "/movies" /*,
-  passport.authenticate("jwt", { session: false })*/,
-  (req, res) => {
+  "/movies",
+  /*passport.authenticate("jwt", { session: false }),*/
+  (_, res) => {
     Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
