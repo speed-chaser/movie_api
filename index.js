@@ -396,21 +396,33 @@ app.post(
   "/users/:Username/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Users.findOneAndUpdate(
-      { Username: req.params.Username },
-      { $push: { FavoriteMovies: req.params.MovieID } },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        res.json(updatedUser);
+    Users.findOne({ Username: req.params.Username })
+      .then((user) => {
+        if (!user) {
+          res.status(404).send("User not found");
+          return;
+        }
+        if (user.FavoriteMovies.includes(req.params.MovieID)) {
+          res.status(400).send("Movie already in favorites");
+          return;
+        }
+
+        Users.findOneAndUpdate(
+          { Username: req.params.Username },
+          { $push: { FavoriteMovies: req.params.MovieID } },
+          { new: true }
+        )
+          .then((updatedUser) => {
+            res.status(201).json(updatedUser);
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+          });
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json(updatedUser);
-        }
+        console.error(err);
+        res.status(500).send("Error: " + err);
       });
   }
 );
