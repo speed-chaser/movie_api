@@ -63,7 +63,7 @@ let allowedOrigins = [
   "http://testsite.com",
   "https://chaseflix-481df0d77a4b.herokuapp.com",
   "https://chaseflix.netlify.app",
-  "https://speed-chaser.github.io/chaseflix-Angular-client",
+  "https://speed-chaser.github.io",
 ];
 
 app.use((req, res, next) => {
