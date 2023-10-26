@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": [
+      "index.js",
+      "auth.js",
+      "models.js",
+      "passport.js",
+      "s3Uploader.js"
+    ]
+  }
+}
