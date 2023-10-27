@@ -2,7 +2,7 @@
 
 Chaseflix API is a robust, user-friendly RESTful API built using Node.js and Express. It provides users with a wide array of movie-related information, enabling them to access details about movies, genres, directors, and actors effortlessly. Tailored to meet all your movie data requirements, Chaseflix API ensures a rich, secure, and extensive suite of features for seamless access to comprehensive movie details.
 
-## 🌟 Essential Features
+##  Main Features
 
 - **List of All Movies**: Retrieve a complete list of all movies available in the database.
 - **Single Movie Details**: Access extensive information about a single movie, including its description, genre, director, image URL, and its featured status.
@@ -13,15 +13,16 @@ Chaseflix API is a robust, user-friendly RESTful API built using Node.js and Exp
    - Allow users to update their personal information such as username, password, email, and date of birth.
    - Users can add or remove movies from their list of favorites.
    - Allow existing users to deregister.
+- **User Profiles**
+   - Users can upload a profile picture and set a bio making their profile more personal.
+   - Users can view a list of all the users and look at other users' profiles and see the favorites they have set.
+   - Users can follow other users.
 
-## 🚀 Optional Features
+##  Additional Features
 
 - **Actor Details**: Users can view which actors starred in which movies, and access information about different actors.
-- **Extended Movie Details**: Users can view additional movie information such as release dates and ratings.
-- **User Lists**:
-   - Allow users to create a "To Watch" list in addition to their "Favorite Movies" list.
 
-## 🔧 Technical Implementations
+##  Technical Implementations
 
 - Developed using Node.js and Express, following REST architecture principles.
 - Utilizes middleware modules such as body-parser for reading data from requests and morgan for logging.
