@@ -67,7 +67,7 @@ or
    ```bash
    node index.js
    ```
-**NOTE** it is important that you change the commented out code here depending on if you are testing locally or not:
+**NOTE** it is important that you change the commented out code here in `index.js` depending on if you are testing locally or not:
 
    ```bash
    /**
@@ -84,3 +84,7 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useUnifiedTopology: true,
 });*/
 ```
+
+### 5. Testing the API
+
+Utilize Postman or any other API testing tool to test the endpoints and ensure that they are working as expected.
